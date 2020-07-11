@@ -2,6 +2,7 @@ package com.example.googleemergencysuite;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -11,14 +12,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.UiSettings;
-import android.widget.CheckBox;
+
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Button;
+import android.content.Intent;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
-    private CheckBox mMyLocationButtonCheckbox;
-    private CheckBox mMyLocationLayerCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ImageButton infohubBtn = findViewById(R.id.infohub_btn);
+        infohubBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                System.out.println("Button Clicked");
+
+                Intent intent = new Intent(getApplicationContext(), InfoHubActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -40,18 +54,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    private boolean isChecked(int id) {
-        return ((CheckBox) findViewById(id)).isChecked();
-    }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        LatLng sydney = new LatLng(-33.9173, 151.2313);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14f));
 
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setZoomControlsEnabled(true);
